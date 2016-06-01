@@ -25,16 +25,21 @@ def mk_nfold(train_file, cv=5):
         test_part.close()
 
 
-def init_data(data_file, fillna='top', fill_values={}):
+def init_data(data_file, fillna=None, fill_values={}):
     """
     read from file, handling NAN value with value occurred most
     """
-    data_set = pandas.load_csv(data_file)
+    data_set = pandas.read_csv(data_file)
 
     if (fillna=='top'):
         for i in data_set.columns:
-            data_set[i].fillna(data_set[i].describe().top)
+            data_set[i].fillna(data_set[i].describe().top, inplace=True)
             fill_values[i] = data_set[i].describe().top
     else:
         for i in data_set.columns:
-            data_set[i].fillna(fill_values[i])
+            if i in fill_values:
+                data_set[i].fillna(fill_values[i], inplace=True)
+            else:
+                print("{} do not have default value".format(i))
+
+    return data_set

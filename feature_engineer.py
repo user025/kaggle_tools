@@ -25,7 +25,7 @@ class FeatureEncoder(object):
 
 
 def one_hot(feature_dict, key, raw_data, threshold=15):
-    counts = raw_data.value_counts()
+    counts = raw_data[key].value_counts()
     for fe, count in counts.items():
         if (count > threshold):
             new_key = key + '__'  + fe
